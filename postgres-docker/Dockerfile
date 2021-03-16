@@ -27,8 +27,15 @@ USER postgres
 # Note: here we use ``&&\`` to run commands one after the other - the ``\``
 #       allows the RUN command to span multiple lines.
 RUN    /etc/init.d/postgresql start &&\
-    psql --command "CREATE USER postgresondocker WITH SUPERUSER PASSWORD 'postgresondocker';" &&\
-    createdb -O postgresondocker postgresondocker
+    # psql --command "CREATE USER docker WITH SUPERUSER PASSWORD 'docker';" &&\
+    # createdb -O docker docker &&\
+    # psql --command "\c docker" &&\
+    psql --command "ALTER USER postgres WITH PASSWORD 'admin';" &&\
+    psql --command "CREATE TABLE message(id SERIAL PRIMARY KEY,value varchar(50),language varchar(6));" &&\
+    psql --command "INSERT INTO message VALUES (1 ,'Teste teste!!', 'pt-br');" &&\
+    psql --command "INSERT INTO message VALUES (2, 'Hello World!!', 'en');" &&\
+    psql --command "SELECT current_database();" &&\
+    psql --command "SELECT * FROM message;"
  
 # Adjust PostgreSQL configuration so that remote connections to the
 # database are possible.
@@ -41,7 +48,7 @@ RUN echo "listen_addresses='*'" >> /etc/postgresql/9.3/main/postgresql.conf
 EXPOSE 5432
  
 # Add VOLUMEs to allow backup of config, logs and databases
-VOLUME  ["/etc/postgresql", "/var/log/postgresql", "/var/lib/postgresql", "./init.sql:/docker-entrypoint-initdb.d/init.sql"]
+VOLUME  ["/etc/postgresql", "/var/log/postgresql", "/var/lib/postgresql"]
 
 # Set the default command to run when starting the container
 CMD ["/usr/lib/postgresql/9.3/bin/postgres", "-D", "/var/lib/postgresql/9.3/main", "-c", "config_file=/etc/postgresql/9.3/main/postgresql.conf"]
