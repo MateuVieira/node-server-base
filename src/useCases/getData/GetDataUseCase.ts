@@ -7,5 +7,7 @@ export class GetDataUseCase {
 
   async execute() {
     const data = await this.getDataRepository.getData();
+
+    return data;
   }
 }
