@@ -1,6 +1,6 @@
 import { Pool } from 'pg';
 
-const host = process.env.HOST || '0.0.0.0';
+const host = process.env.HOST;
 const port = process.env.PORT;
 
 export default new Pool({
