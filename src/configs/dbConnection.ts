@@ -1,6 +1,7 @@
 import { Pool } from 'pg';
 
-const host = 'http://database-svc.default.svc.cluster.local:5432' || process.env.HOST || '0.0.0.0';
+// const host = 'http://database-svc.default.svc.cluster.local:5432' || process.env.HOST || '0.0.0.0';
+const host = '10.100.100.100' || process.env.HOST;
 const port = process.env.PORT;
 
 export default new Pool({
